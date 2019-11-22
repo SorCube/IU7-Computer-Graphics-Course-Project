@@ -1,2 +1,2 @@
-# Computer Graphics Course Project
+# Курсовой проект по курсу "Компьютерная графика"
 
