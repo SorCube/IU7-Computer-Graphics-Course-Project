@@ -34,6 +34,8 @@ public:
 	MathVector operator*(double k) const;
 	MathVector& operator*=(double k);
 	
+	friend MathVector operator*(double k, const MathVector& v);
+	
 	MathVector operator+(const MathVector& v) const;
 	MathVector& operator+=(const MathVector& v);
 	
@@ -41,7 +43,6 @@ public:
 	MathVector& operator-=(const MathVector& v);
 
     double operator&(const MathVector& v) const;
-    double operator^(MathVector& v);
 	
 private:
 	double _x, _y, _z;

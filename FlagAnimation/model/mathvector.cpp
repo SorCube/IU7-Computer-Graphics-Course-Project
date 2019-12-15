@@ -119,6 +119,11 @@ MathVector &MathVector::operator*=(double k)
 	return *this;
 }
 
+MathVector operator*(double k, const MathVector& v)
+{
+	return MathVector(v._x * k, v._y * k, v._z * k);
+}
+
 MathVector MathVector::operator+(const MathVector& v) const
 {
 	return MathVector(_x + v._x, _y + v._y, _z + v._z);
@@ -150,7 +155,3 @@ double MathVector::operator&(const MathVector& v) const
    return _x * v._x + _y * v._y + _z * v._z;
 }
 
-double MathVector::operator^(MathVector& v)
-{
-	return acos((*this & v) / (length() * v.length()));
-}

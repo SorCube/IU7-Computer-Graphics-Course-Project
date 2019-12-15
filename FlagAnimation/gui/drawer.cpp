@@ -14,7 +14,7 @@ ModelDrawer::ModelDrawer(Canvas* canv) :
 {
 	LC = QColor("black");
 
-    light = Vertex(0, -200, 600);
+    light = Vertex(-500, -500, 1000);
 
     z_buf = new int*[IMG_SIZE];
     c_buf = new QColor*[IMG_SIZE];
@@ -95,7 +95,7 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v, Vertex light_pos,
 	MathVector n = (vec[2] - vec[0]) * (vec[1] - vec[0]);
 	n.normalize();
 	l.normalize();
-	double intensity = n ^ l;
+	double intensity = n & l;
 	
 	if (intensity <= 0)
 		return;
@@ -119,18 +119,22 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v, Vertex light_pos,
 	
 	for (int i = 0; i < int(round(dy_0_2)); i++)
 	{
-		bool second_half = (i > v[1].y() - v[0].y()) || (v[1].y() == v[0].y());
+		bool second_half = (i > dy_0_1) || (v[1].y() == v[0].y());
 		double seg_height = second_half ? dy_1_2 : dy_0_1;
 		
 		double alpha = i / dy_0_2;
-		double beta = (i-(second_half ? dy_0_1 : 0)) / seg_height; 
+		double beta = 1.0;
+		if (second_half)
+			beta = (i - dy_0_1) / seg_height;
+		else
+			beta = i / seg_height;
 		
-		MathVector A = vec[0] + (vec[2] - vec[0]) * alpha;
+		MathVector A = vec[0] + alpha * (vec[2] - vec[0]);
 		MathVector B;
 		if (second_half)
-			B = vec[1] + (vec[2] - vec[1]) * beta;
+			B = vec[1] + beta * (vec[2] - vec[1]);
 		else
-			B = vec[0] + (vec[1] - vec[0]) * beta;
+			B = vec[0] + beta * (vec[1] - vec[0]);
 		
 		if (A.x() > B.x())
 			std::swap(A, B);
@@ -141,7 +145,7 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v, Vertex light_pos,
 			if (B.x() != A.x())
 				phi = (j - A.x()) / (B.x() - A.x());
 			
-			MathVector P = A + (B - A) * phi;
+			MathVector P = A + phi * (B - A);
 			int idx = int(round(P.x()));
 			int idy = int(round(P.y()));
 			
@@ -173,22 +177,30 @@ void ModelDrawer::draw_scene(std::vector<Model> models, Camera& cam)
 		return;
 	
     for (int i = 0; i < IMG_SIZE; i++)
+	{
         for (int j = 0; j < IMG_SIZE; j++)
         {
             z_buf[i][j] = -INT_MAX;
             c_buf[i][j] = bg_color;
         }
+	}
 	
 	Vertex light_pos = light;
 	
 	light_pos.shift(cam.get_shift_params());
 	light_pos.scale(cam.get_scale_params(), cam.get_center());
 	light_pos.rotate(cam.get_rotate_params(), cam.get_center());
+	
+	light_pos.shift(IMG_SIZE / 2, IMG_SIZE / 2, 0);
 
     for (auto model : models)
     {
 		std::vector<Vertex>& vertices = model.get_vertices();
 		std::vector<Triangle> triangles = model.get_triangles();
+		
+		for (size_t i = 0; i < vertices.size(); i++)
+			vertices[i].shift(IMG_SIZE / 2, IMG_SIZE / 2, 0);
+		
 		for (auto tr : triangles)
 		{
 			std::vector<Vertex> tr_vertices = tr.get_vertices(vertices);
@@ -199,5 +211,6 @@ void ModelDrawer::draw_scene(std::vector<Model> models, Camera& cam)
 	for (size_t i = 0; i < IMG_SIZE; i++)
         for (size_t j = 0; j < IMG_SIZE; j++)
             img.setPixelColor(i, j, c_buf[i][j].rgb());
+	
 	canvas->repaint();
 }

@@ -30,10 +30,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
 	flag.rotate(M_PI / 2, 0, 0, Vertex(0, 0, 350));
 	facade.add_model(flag);
 	
-	Transformations::Shifting sh(IMG_SIZE / 2 + 490, IMG_SIZE / 2 - 10, -40);
-	CameraTransformator tr(sh);
-	facade.transform_camera(tr, 0);
-	
 	Transformations::Rotation rt(-0.85, 0.6, -0.45);
 	CameraTransformator tr2(rt);
 	facade.transform_camera(tr2, 0);
