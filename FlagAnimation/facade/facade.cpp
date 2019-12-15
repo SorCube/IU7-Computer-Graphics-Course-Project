@@ -10,6 +10,11 @@ void Facade::add_model(Model model)
 	scene.add_model(std::make_shared<Model>(model));
 }
 
+void Facade::add_model(std::shared_ptr<Model> model)
+{
+	scene.add_model(model);
+}
+
 void Facade::remove_model(size_t index)
 {
 	scene.remove_model(index);

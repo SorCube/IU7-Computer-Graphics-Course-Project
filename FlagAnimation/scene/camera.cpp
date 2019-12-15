@@ -1,10 +1,11 @@
 #include <cmath>
 #include "camera.h"
 
-Camera::Camera(Vertex c) : center(c),
+Camera::Camera(Vertex c) : pos(c),
 	shift_params(3, 0), scale_params(3, 1), rotate_params(3, 0)
 {
-	pos = Vertex(c.x(), c.y(), -10000);
+	// pos = Vertex(c.x(), c.y(), -10000);
+	center = Vertex(0, 0, 0);
 }
 
 Vertex& Camera::get_pos()

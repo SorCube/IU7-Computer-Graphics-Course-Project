@@ -15,6 +15,7 @@ public:
 
     void add_model(BaseUploader& upld, BaseBuilder& bld);
 	void add_model(Model model);
+	void add_model(std::shared_ptr<Model> model);
     void remove_model(size_t index);
 
     void add_camera(Vertex pos);

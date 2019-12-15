@@ -24,6 +24,8 @@ QtApplication {
         "exceptions/uploadexception.h",
         "facade/facade.cpp",
         "facade/facade.h",
+        "flag/flag.cpp",
+        "flag/flag.h",
         "gui/drawer.cpp",
         "gui/drawer.h",
         "main.cpp",

@@ -12,6 +12,7 @@ public:
 	Model() {}
 	Model(const Model &model);
 	Model(Model &&model);
+	~Model() = default;
 	
 	Model& operator=(const Model &model);
 	Model& operator=(Model &&model);

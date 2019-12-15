@@ -15,9 +15,8 @@ public:
     virtual void draw_edge(Vertex v1, Vertex v2,
 						   QColor colour = QColor(0, 0, 0)) = 0;
 	
-	virtual void draw_triangle(std::vector<Vertex> vertices, Vertex& cam_pos,
-							   Vertex& light_pos,
-							   QColor colour = QColor(0, 0, 0)) = 0;
+	virtual void draw_triangle(std::vector<Vertex> v, Vertex light_pos,
+							   QColor colour, bool outline = false) = 0;
 	
 	virtual void draw_scene(std::vector<Model> models, Camera& cam) = 0;
 	
@@ -32,9 +31,8 @@ public:
     void draw_edge(Vertex v1, Vertex v2,
 				   QColor colour = QColor(0, 0, 0)) override;
 	
-	void draw_triangle(std::vector<Vertex> v, Vertex& cam_pos,
-					   Vertex& light_pos,
-					   QColor colour = QColor(0, 0, 0)) override;
+	void draw_triangle(std::vector<Vertex> v, Vertex light_pos,
+					   QColor colour, bool outline = false) override;
 	
 	void draw_scene(std::vector<Model> models, Camera& cam) override;
 
@@ -45,11 +43,7 @@ private:
 	QColor FC, LC;
 	
 	int** z_buf;
-	
-	int** screen;
-	int** shadow;
-	bool** transformedShadow;
-	QColor** buffer;
+	QColor** c_buf;
 };
 
 #endif // DRAWER_H
