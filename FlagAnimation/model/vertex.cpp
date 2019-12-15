@@ -145,7 +145,7 @@ void Vertex::rotate(std::vector<double> a, Vertex pc)
 	_y = py - dx * sin(a[2]) + dy * cos(a[2]);
 }
 
-double distance(Vertex p1, Vertex p2)
+double distance(Vertex &p1, Vertex &p2)
 {
 	double dx = p2.x() - p1.x();
 	double dy = p2.y() - p1.y();

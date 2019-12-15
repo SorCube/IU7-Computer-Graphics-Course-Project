@@ -37,6 +37,6 @@ private:
 	double _x, _y, _z;
 };
 
-double distance(Vertex p1, Vertex p2);
+double distance(Vertex &p1, Vertex &p2);
 
 #endif // POINT_H

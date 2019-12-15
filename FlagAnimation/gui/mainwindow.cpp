@@ -2,12 +2,19 @@
 #include "ui_mainwindow.h"
 #include "../workers/modelcreator.h"
 
+
 #define CYL_TR_AMOUNT 50
 #define RECT_NODE_AMOUNT_W 50
 #define RECT_NODE_AMOUNT_H 10
 
+#define FLAGPOLE_HEIGHT 400
+#define FLAG_WIDTH 200
+#define FLAG_HEIGHT 100
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
-	  ui(new Ui::MainWindow)
+	  ui(new Ui::MainWindow),
+	  flag(Vertex(0, 0, FLAGPOLE_HEIGHT - 10), FLAG_WIDTH, FLAG_HEIGHT,
+		   QColor(180, 180, 255))
 {
 	ui->setupUi(this);
 	
@@ -15,20 +22,21 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
 					 this, SLOT(rotate_camera(std::vector<double>)));
 	
 	CylinderCreator cr_cyl;
-	facade.add_model(cr_cyl.create(Vertex(0, 0, 0), 5, 400, CYL_TR_AMOUNT,
-								   QColor(255, 255, 255)));
+	facade.add_model(cr_cyl.create(Vertex(0, 0, 0), 5, FLAGPOLE_HEIGHT,
+								   CYL_TR_AMOUNT, QColor(255, 255, 255)));
 	ParallelepipedCreator cr_par;
 	facade.add_model(cr_par.create(Vertex(0, 0, 10),
 								   100, 100, 20, QColor(180, 180, 180)));
 	
 	facade.add_camera(Vertex(0, 0, 0));
 	
-	FlexRectCreator cr_flag;
+	/*FlexRectCreator cr_flag;
 	Model flag = cr_flag.create(Vertex(105, 0, 350), 200, 100,
 								RECT_NODE_AMOUNT_W, RECT_NODE_AMOUNT_H,
 								QColor(120, 120, 255));
-	flag.rotate(M_PI / 2, 0, 0, Vertex(0, 0, 350));
-	facade.add_model(flag);
+	flag.rotate(M_PI / 2, 0, 0, Vertex(0, 0, 350));*/
+
+	facade.add_model(flag.get_model());
 	
 	Transformations::Rotation rt(-0.85, 0.6, -0.45);
 	CameraTransformator tr2(rt);

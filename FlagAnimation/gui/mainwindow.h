@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include "drawer.h"
 #include "../facade/facade.h"
+#include "../flag/flag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,6 +42,7 @@ private:
 
     Facade facade;
 	Canvas* canvas;
+	Flag flag;
 };
 
 #endif // MAINWINDOW_H
