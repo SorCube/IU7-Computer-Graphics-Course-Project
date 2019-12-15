@@ -55,11 +55,11 @@ Model FlexRectCreator::create(Vertex c, double w, double h,
 		for (size_t j = ind; j < ind + m - 1; j++)
 		{
 			triangles.push_back(Triangle(j, j + 1, j + m, colour));
-			triangles.push_back(Triangle(j, j + 1, j - m + 1, colour));
+			triangles.push_back(Triangle(j - m + 1, j, j + 1, colour));
 		}
 	
 	for (size_t j = ind; j < ind + m - 1; j++)
-		triangles.push_back(Triangle(j, j + 1, j - m + 1, colour));
+		triangles.push_back(Triangle(j - m + 1, j, j + 1, colour));
 	
 	return rect;
 }
@@ -156,8 +156,6 @@ Model CylinderCreator::create(Vertex center, double rad, double height,
     }
     triangles.push_back(Triangle(grad, 1, 2 * grad + 1, colour));
     triangles.push_back(Triangle(2*grad + 1, grad + 2, 1, colour));
-	
-	
 
     return cylinder;
 }
