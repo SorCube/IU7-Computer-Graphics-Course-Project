@@ -17,7 +17,7 @@ Model PlateCreator::create(Vertex c, double w, double h, QColor colour)
 	vertices.push_back(Vertex(c.x() + w, c.y() - h, c.z()));
 	
 	triangles.push_back(Triangle(0, 1, 3, colour));
-	triangles.push_back(Triangle(1, 2, 3, colour));
+	triangles.push_back(Triangle(2, 3, 1, colour));
 	
 	return plate;
 }
@@ -55,11 +55,11 @@ Model FlexRectCreator::create(Vertex c, double w, double h,
 		for (size_t j = ind; j < ind + m - 1; j++)
 		{
 			triangles.push_back(Triangle(j, j + 1, j + m, colour));
-			triangles.push_back(Triangle(j - m + 1, j, j + 1, colour));
+			triangles.push_back(Triangle(j + 1, j - m + 1, j, colour));
 		}
 	
 	for (size_t j = ind; j < ind + m - 1; j++)
-		triangles.push_back(Triangle(j - m + 1, j, j + 1, colour));
+		triangles.push_back(Triangle(j + 1, j - m + 1, j, colour));
 	
 	return rect;
 }
@@ -85,19 +85,19 @@ Model ParallelepipedCreator::create(Vertex pc, double a, double b,
 	vertices.push_back(Vertex(pc.x() + a, pc.y() - b, pc.z() - c));
 	vertices.push_back(Vertex(pc.x() + a, pc.y() - b, pc.z() + c));
 	
-	triangles.push_back(Triangle(0, 1, 3, colour));
-	triangles.push_back(Triangle(0, 2, 3, colour));
-	triangles.push_back(Triangle(2, 3, 5, colour));
-	triangles.push_back(Triangle(2, 4, 5, colour));
-	triangles.push_back(Triangle(4, 5, 7, colour));
-	triangles.push_back(Triangle(4, 6, 7, colour));
-	triangles.push_back(Triangle(6, 7, 1, colour));
-	triangles.push_back(Triangle(6, 0, 1, colour));
+	triangles.push_back(Triangle(1, 3, 0, colour));
+	triangles.push_back(Triangle(2, 0, 3, colour));
+	triangles.push_back(Triangle(3, 5, 2, colour));
+	triangles.push_back(Triangle(4, 2, 5, colour));
+	triangles.push_back(Triangle(5, 7, 4, colour));
+	triangles.push_back(Triangle(6, 4, 7, colour));
+	triangles.push_back(Triangle(7, 1, 6, colour));
+	triangles.push_back(Triangle(0, 6, 1, colour));
 	
-	triangles.push_back(Triangle(1, 3, 7, colour));
-	triangles.push_back(Triangle(3, 5, 7, colour));
-	triangles.push_back(Triangle(0, 2, 4, colour));
-	triangles.push_back(Triangle(4, 6, 0, colour));
+	triangles.push_back(Triangle(1, 7, 3, colour));
+	triangles.push_back(Triangle(5, 3, 7, colour));
+	triangles.push_back(Triangle(2, 4, 0, colour));
+	triangles.push_back(Triangle(6, 0, 4, colour));
 	
 	return par;
 }

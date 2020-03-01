@@ -39,29 +39,6 @@ std::vector<Triangle>& Model::get_triangles()
 	return triangles;
 }
 
-std::vector<Triangle> Model::get_visible_sides(Camera &cm)
-{
-	std::vector<Triangle> sides;
-	for (auto tr : triangles)
-    {
-        std::vector<Vertex> verts = tr.get_vertices(vertices);
-        MathVector v1 = MathVector(verts[1], verts[2]);
-        MathVector v2 = MathVector(verts[1], verts[0]);
-        MathVector n = v1 * v2;
-        MathVector v = MathVector(cm.get_pos(), verts[1]);
-
-        v.normalize();
-        n.normalize();
-
-        double comp = v & n;
-        /*if (inverted)
-            comp *= -1;*/
-        if (comp >= 0)
-            sides.push_back(tr);
-    }
-	return sides;
-}
-
 void Model::shift(double dx, double dy, double dz)
 {
 	for (int i = 0; i < vertices.size(); i++)
@@ -100,4 +77,40 @@ void Model::rotate(std::vector<double> a, Vertex pc)
 {
 	for (int i = 0; i < vertices.size(); i++)
 		vertices[i].rotate(a, pc);
+}
+
+std::vector<MathVector> Model::get_normals()
+{
+	Vertex v_zero(0, 0, 0);
+	std::vector<MathVector> normals(vertices.size());
+	std::vector<int> k(vertices.size());
+	
+	for (size_t i = 0; i < normals.size(); i++)
+	{
+		normals[i] = MathVector(0, 0, 0);
+		k[i] = 0;
+	}
+	
+	for (size_t i = 0; i < triangles.size(); i++)
+	{
+		std::vector<Vertex> v = triangles[i].get_vertices(vertices);
+		
+		MathVector vec[] = { MathVector(v_zero, v[0]),
+							 MathVector(v_zero, v[1]),
+							 MathVector(v_zero, v[2]) };
+		
+		MathVector n = (vec[2] - vec[0]) * (vec[1] - vec[0]);
+		n.normalize();
+		
+		for (size_t j = 0; j < 3; j++)
+		{
+			normals[triangles[i].get_vertex(j)] += n;
+			k[triangles[i].get_vertex(j)]++;
+		}
+	}
+	
+	for (size_t i = 0; i < normals.size(); i++)
+		normals[i] /= double(k[i]);
+	
+	return normals;
 }

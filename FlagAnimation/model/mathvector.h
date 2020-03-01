@@ -25,7 +25,7 @@ public:
 	void set_z(double z);
 	void set(double x, double y, double z);
 	
-	double length();
+	double length() const;
     void normalize();
 	
 	MathVector operator*(const MathVector& v) const;
@@ -33,16 +33,22 @@ public:
 	
 	MathVector operator*(double k) const;
 	MathVector& operator*=(double k);
-	
 	friend MathVector operator*(double k, const MathVector& v);
+	
+	MathVector operator/(double k) const;
+	MathVector& operator/=(double k);
 	
 	MathVector operator+(const MathVector& v) const;
 	MathVector& operator+=(const MathVector& v);
+	
+	MathVector operator-() const;
 	
 	MathVector operator-(const MathVector& v) const;
 	MathVector& operator-=(const MathVector& v);
 
     double operator&(const MathVector& v) const;
+	
+	double operator^(const MathVector& v) const;
 	
 private:
 	double _x, _y, _z;

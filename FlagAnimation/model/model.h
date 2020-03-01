@@ -4,6 +4,7 @@
 #include <vector>
 #include "object.h"
 #include "triangle.h"
+#include "mathvector.h"
 #include "../scene/camera.h"
 
 class Model : public VisibleObject
@@ -20,8 +21,6 @@ public:
 	std::vector<Vertex>& get_vertices();
 	std::vector<Triangle>& get_triangles();
 	
-	std::vector<Triangle> get_visible_sides(Camera &cm);
-	
 	void shift(double dx, double dy, double dz);
     void scale(double kx, double ky, double kz, Vertex pc=Vertex(0, 0, 0));
     void rotate(double ax, double ay, double az, Vertex pc=Vertex(0, 0, 0));
@@ -29,6 +28,8 @@ public:
 	void shift(std::vector<double> d);
 	void scale(std::vector<double> k, Vertex pc = Vertex(0, 0, 0));
 	void rotate(std::vector<double> a, Vertex pc = Vertex(0, 0, 0));
+	
+	std::vector<MathVector> get_normals();
 	
 private:
 	std::vector<Vertex> vertices;

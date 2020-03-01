@@ -23,12 +23,13 @@ public:
 	void draw_point(double x, double y, QColor c);
 	void draw_line(double x1, double y1, double x2, double y2, QColor c);
 	
-	
 protected:
-	virtual void paintEvent(QPaintEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseReleaseEvent(QMouseEvent *event);
+	virtual void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+	virtual void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+	virtual void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
+	virtual void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+	virtual void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+	virtual void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 	
 private:
 	QImage img;
@@ -36,6 +37,8 @@ private:
 	int prev_x, prev_y;
 	
 signals:
+	void shift_camera(std::vector<double> param);
+	void scale_camera(std::vector<double> param);
 	void rotate_camera(std::vector<double> param);
 	
 public slots:
