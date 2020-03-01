@@ -62,6 +62,20 @@ std::vector<Vertex> Triangle::get_vertices(std::vector<Vertex>& vertices)
 	return _vertices;
 }
 
-QColor Triangle::get_color() const {return colour;}
+std::vector<MathVector> Triangle::get_normals(std::vector<MathVector>& normals)
+{
+	std::vector<MathVector> _normals;
+	for (size_t i = 0; i < 3; i++)
+		_normals.push_back(normals[get_vertex(i)]);
+	return _normals;
+}
 
-void Triangle::set_color(QColor c) {colour = c;}
+QColor Triangle::get_color() const
+{
+	return colour;
+}
+
+void Triangle::set_color(QColor c)
+{
+	colour = c;
+}

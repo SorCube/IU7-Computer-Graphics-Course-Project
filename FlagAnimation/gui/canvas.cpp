@@ -7,6 +7,7 @@ Canvas::Canvas(QWidget *parent) :
 {
 	img = QImage(IMG_SIZE, IMG_SIZE, QImage::Format_RGB32);
 	setMouseTracking(true);
+	setFocusPolicy(Qt::ClickFocus);
 }
 
 void Canvas::paintEvent(QPaintEvent *event)
@@ -15,6 +16,43 @@ void Canvas::paintEvent(QPaintEvent *event)
 	painter.begin(this);
 	painter.drawImage(0, 0, img);
 	painter.end();
+}
+
+void Canvas::keyPressEvent(QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_A)
+		emit shift_camera({-10, 0, 0});
+	if (event->key() == Qt::Key_D)
+		emit shift_camera({10, 0, 0});
+	if (event->key() == Qt::Key_W)
+		emit shift_camera({0, -10, 0});
+	if (event->key() == Qt::Key_S)
+		emit shift_camera({0, 10, 0});
+	if (event->key() == Qt::Key_Q)
+		emit shift_camera({0, 0, -10});
+	if (event->key() == Qt::Key_E)
+		emit shift_camera({0, 0, 10});
+	
+	if (event->key() == Qt::Key_R)
+		emit rotate_camera({-0.05, 0, 0});
+	if (event->key() == Qt::Key_F)
+		emit rotate_camera({0.05, 0, 0});
+	if (event->key() == Qt::Key_T)
+		emit rotate_camera({0, -0.05, 0});
+	if (event->key() == Qt::Key_G)
+		emit rotate_camera({0, 0.05, 0});
+	if (event->key() == Qt::Key_Y)
+		emit rotate_camera({0, 0, -0.05});
+	if (event->key() == Qt::Key_H)
+		emit rotate_camera({0, 0, 0.05});
+}
+
+void Canvas::wheelEvent(QWheelEvent *event)
+{
+	if (event->delta() > 0)
+		emit scale_camera({1.1, 1.1, 1.1});
+	else
+		emit scale_camera({0.9, 0.9, 0.9});
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event)

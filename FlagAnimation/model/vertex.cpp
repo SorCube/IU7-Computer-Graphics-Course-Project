@@ -89,23 +89,23 @@ void Vertex::rotate_x(double angle, Vertex pc)
 {
 	double py = pc.y(), pz = pc.z();
 	double dy = _y - py, dz = _z - pz;
-	_y = py + dy * cos(angle) + dz * sin(angle);
-	_z = pz - dy * sin(angle) + dz * cos(angle);
+	_y = py + dy * cos(angle) - dz * sin(angle);
+	_z = pz + dy * sin(angle) + dz * cos(angle);
 }
 
 void Vertex::rotate_y(double angle, Vertex pc)
 {
 	double pz = pc.z(), px = pc.x();
 	double dz = _z - pz, dx = _x - px;
-	_z = pz + dz * cos(angle) + dx * sin(angle);
-	_x = px - dz * sin(angle) + dx * cos(angle);
+	_z = pz + dz * cos(angle) - dx * sin(angle);
+	_x = px + dz * sin(angle) + dx * cos(angle);
 }
 
 void Vertex::rotate_z(double angle, Vertex pc)
 {
 	double px = pc.x(), py = pc.y();
 	double dx = _x - px, dy = _y - py;
-	_x = px + dx * cos(angle) + dy * sin(angle);
+	_x = px + dx * cos(angle) - dy * sin(angle);
 	_y = py - dx * sin(angle) + dy * cos(angle);
 }
 
@@ -149,6 +149,6 @@ double distance(Vertex &p1, Vertex &p2)
 {
 	double dx = p2.x() - p1.x();
 	double dy = p2.y() - p1.y();
-	double dz = p2.z() - p2.z();
+	double dz = p2.z() - p1.z();
 	return sqrt(dx * dx + dy * dy + dz * dz);
 }

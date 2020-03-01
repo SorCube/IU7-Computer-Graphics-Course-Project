@@ -77,7 +77,7 @@ void MathVector::set(double x, double y, double z)
 	set_z(z);
 }
 
-double MathVector::length()
+double MathVector::length() const
 {
     return sqrt(_x * _x + _y * _y + _z * _z);
 }
@@ -129,12 +129,35 @@ MathVector MathVector::operator+(const MathVector& v) const
 	return MathVector(_x + v._x, _y + v._y, _z + v._z);
 }
 
+MathVector MathVector::operator/(double k) const
+{
+	if (k == 0)
+		return *this;
+	return MathVector(_x / k, _y / k, _z / k);
+}
+
+MathVector &MathVector::operator/=(double k)
+{
+	if (k != 0)
+	{
+		_x /= k;
+		_y /= k;
+		_z /= k;
+	}
+	return *this;
+}
+
 MathVector& MathVector::operator+=(const MathVector& v)
 {
 	_x += v._x;
 	_y += v._y;
 	_z += v._z;
 	return *this;
+}
+
+MathVector MathVector::operator-() const
+{
+	return MathVector(-_x, -_y, -_z);
 }
 
 MathVector MathVector::operator-(const MathVector& v) const
@@ -152,6 +175,11 @@ MathVector& MathVector::operator-=(const MathVector& v)
 
 double MathVector::operator&(const MathVector& v) const
 {
-   return _x * v._x + _y * v._y + _z * v._z;
+	return _x * v._x + _y * v._y + _z * v._z;
+}
+
+double MathVector::operator^(const MathVector &v) const
+{
+	return acos(((*this) & v) / (length() * v.length()));
 }
 

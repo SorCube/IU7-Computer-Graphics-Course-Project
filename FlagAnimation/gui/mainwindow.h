@@ -29,9 +29,10 @@ public slots:
 	void scale_camera(std::vector<double> params);
 	void rotate_camera(std::vector<double> params);
 	
-protected:
-	void keyPressEvent(QKeyEvent *event) override;
-	virtual void wheelEvent(QWheelEvent *event) override;
+private slots:
+	void on_start_button_clicked();
+	
+	void on_reset_button_clicked();
 	
 private:
 	Ui::MainWindow *ui;
@@ -42,7 +43,11 @@ private:
 
     Facade facade;
 	Canvas* canvas;
+	
 	Flag flag;
+	std::shared_ptr<Model> flag_ptr;
+	
+	bool is_animating;
 };
 
 #endif // MAINWINDOW_H

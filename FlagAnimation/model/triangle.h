@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 #include <QColor>
+#include "mathvector.h"
 #include "vertex.h"
 
 class Triangle
@@ -20,6 +21,7 @@ public:
 	void set_vertex(size_t index, size_t value);
 	
 	std::vector<Vertex> get_vertices(std::vector<Vertex>& vertices);
+	std::vector<MathVector> get_normals(std::vector<MathVector>& normals);
 	
 	QColor get_color() const;
 	void set_color(QColor c);
