@@ -71,6 +71,46 @@ void ModelDrawer::draw_edge(Vertex v1, Vertex v2, QColor colour)
 	}
 }
 
+void ModelDrawer::draw_line(MathVector &A, MathVector &B, double ia, double ib,
+							QColor colour)
+{
+	double dx = B.x() - A.x();
+	double ddx = dx == 0 ? 0 : 1 / dx;
+	
+	MathVector P = A;
+	MathVector dP = (B - A) * ddx;
+	
+	double ip = ia;
+	double d_ip = (ib - ia) * ddx;
+	
+	for (int x = 0; x <= dx; x++)
+	{
+		int idx = round(P.x());
+		int idy = round(P.y());
+		
+		if (idx >= 0 && idx < IMG_SIZE && idy >= 0 && idy < IMG_SIZE &&
+			z_buf[idx][idy] < P.z())
+		{
+			z_buf[idx][idy] = round(P.z());
+			
+			int r = round(colour.red() * abs(ip));
+			int g = round(colour.green() * abs(ip));
+			int b = round(colour.blue() * abs(ip));
+			
+			if (r > 255)
+				r = 255;
+			if (g > 255)
+				g = 255;
+			if (b > 255)
+				b = 255;
+			
+			c_buf[idx][idy] = QColor(r, g, b);
+		}
+		P += dP;
+		ip += d_ip;
+	}
+}
+
 void ModelDrawer::draw_triangle(std::vector<Vertex> v,
 								std::vector<MathVector> n,
 								MathVector l, QColor colour, bool outline)
@@ -80,7 +120,7 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v,
 	
 	double intens[3];
 	for (int i = 0; i < 3; i++)
-		intens[i] = abs(n[i] & l);
+		intens[i] = n[i] & l;
 	
 	if (v[0].y() > v[1].y())
 	{
@@ -109,67 +149,76 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v,
 	double dy_0_1 = v[1].y() - v[0].y();
 	double dy_1_2 = v[2].y() - v[1].y();
 	
-	double ia_0 = intens[0] / dy_0_1;
-	double ia_1 = intens[1] / dy_0_1;
-	double ib_0 = intens[0] / dy_0_2;
-	double ib_2 = intens[2] / dy_0_2;
+	MathVector A = vec[0];
+	MathVector B = vec[0];
+	MathVector dA = (vec[1] - vec[0]) / dy_0_1;
+	MathVector dB = (vec[2] - vec[0]) / dy_0_2;
 	
-	for (int i = 0; i < dy_0_2; i++)
+	double ia = intens[0] * (v[1].y() - v[0].y()) / dy_0_1;
+	double ib = intens[0] * (v[2].y() - v[0].y()) / dy_0_2;
+	
+	double d_ia = (intens[1] - intens[0]) / dy_0_1;
+	double d_ib = (intens[2] - intens[0]) / dy_0_2;
+	
+	bool big_left = v[2].x() < v[1].x();
+	if (big_left)
 	{
-		bool second_half = (i > dy_0_1) || (v[1].y() == v[0].y());
-		double seg_height = second_half ? dy_1_2 : dy_0_1;
-		
-		double alpha = i / dy_0_2;
-		double beta = 1.0;
-		if (second_half)
-			beta = (i - dy_0_1) / seg_height;
-		else
-			beta = i / seg_height;
-		
-		MathVector A = vec[0] + alpha * (vec[2] - vec[0]);
-		MathVector B;
-		if (second_half)
-			B = vec[1] + beta * (vec[2] - vec[1]);
-		else
-			B = vec[0] + beta * (vec[1] - vec[0]);
-		
+		std::swap(dA, dB);
+		std::swap(ia, ib);
+		std::swap(d_ia, d_ib);
+	}
+	
+	for (int i = 0; i < dy_0_1; i++)
+	{
 		if (A.x() > B.x())
-			std::swap(A, B);
-		
-		double dx = B.x() - A.x();
-		double ddx = (dx == 0) ? 0.0 : 1 / dx;
-		double ia = (dx == 0) ? 0.0 : (ia_0 * (v[1].y() - A.y()) +
-									   ia_1 * (A.y() - v[0].y())) / dx;
-		double ib = (dx == 0) ? 0.0 : (ib_0 * (v[2].y() - B.y()) +
-									   ib_2 * (B.y() - v[0].y())) / dx;
-		
-		for (int x = 0; x <= dx; x++)
 		{
-			MathVector P = A + x * ddx * (B - A);
-			double intens_p = ia * (B.x() - P.x()) + ib * (P.x() - A.x());
-			
-			int idx = round(P.x());
-			int idy = round(P.y());
-			
-			if (idx >= 0 && idx < IMG_SIZE && idy >= 0 && idy < IMG_SIZE &&
-					z_buf[idx][idy] < P.z())
-			{
-				z_buf[idx][idy] = int(round(P.z()));
-				
-				int r = round(colour.red() * abs(intens_p));
-				int g = round(colour.green() * abs(intens_p));
-				int b = round(colour.blue() * abs(intens_p));
-				
-				if (r > 255)
-					r = 255;
-				if (g > 255)
-					g = 255;
-				if (b > 255)
-					b = 255;
-				
-				c_buf[idx][idy] = QColor(r, g, b);
-			}
+			std::swap(A, B);
+			std::swap(dA, dB);
+			std::swap(ia, ib);
+			std::swap(d_ia, d_ib);
 		}
+		
+		draw_line(A, B, ia, ib, colour);
+		
+		A += dA;
+		B += dB;
+		ia += d_ia;
+		ib += d_ib;
+	}
+	
+	if (big_left)
+	{
+		B = vec[1];
+		dB = (vec[2] - vec[1]) / dy_1_2;
+		
+		ib = intens[1] * (v[2].y() - v[1].y()) / dy_1_2;
+		d_ib = (intens[2] - intens[1]) / dy_1_2;
+	}
+	else
+	{
+		A = vec[1];
+		dA = (vec[2] - vec[1]) / dy_1_2;
+		
+		ia = intens[1] * (v[2].y() - v[1].y()) / dy_1_2;
+		d_ia = (intens[2] - intens[1]) / dy_1_2;
+	}
+	
+	for (int i = 0; i < dy_1_2; i++)
+	{
+		if (A.x() > B.x())
+		{
+			std::swap(A, B);
+			std::swap(dA, dB);
+			std::swap(ia, ib);
+			std::swap(d_ia, d_ib);
+		}
+		
+		draw_line(A, B, ia, ib, colour);
+		
+		A += dA;
+		B += dB;
+		ia += d_ia;
+		ib += d_ib;
 	}
 	
 	if (outline)

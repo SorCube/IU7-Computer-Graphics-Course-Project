@@ -43,6 +43,9 @@ public:
     void draw_edge(Vertex v1, Vertex v2,
 				   QColor colour = QColor(0, 0, 0)) override;
 	
+	void draw_line(MathVector &A, MathVector &B, double ia, double ib,
+				   QColor colour);
+	
 	void draw_triangle(std::vector<Vertex> v, std::vector<MathVector> n,
 					   MathVector l, QColor colour,
 					   bool outline = false) override;
