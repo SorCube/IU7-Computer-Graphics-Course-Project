@@ -83,15 +83,17 @@ void ModelDrawer::draw_line(MathVector &A, MathVector &B, double ia, double ib,
 	double ip = ia;
 	double d_ip = (ib - ia) * ddx;
 	
-	for (int x = 0; x <= dx; x++)
+	int x_start = round(A.x());
+	int x_end = round(B.x());
+	int y = round(P.y());
+	
+	for (int x = x_start; x <= x_end; x++)
 	{
-		int idx = round(P.x());
-		int idy = round(P.y());
 		
-		if (idx >= 0 && idx < IMG_SIZE && idy >= 0 && idy < IMG_SIZE &&
-			z_buf[idx][idy] < P.z())
+		if (x >= 0 && x < IMG_SIZE && y >= 0 && y < IMG_SIZE &&
+			z_buf[x][y] < P.z())
 		{
-			z_buf[idx][idy] = round(P.z());
+			z_buf[x][y] = round(P.z());
 			
 			int r = round(colour.red() * abs(ip));
 			int g = round(colour.green() * abs(ip));
@@ -104,7 +106,7 @@ void ModelDrawer::draw_line(MathVector &A, MathVector &B, double ia, double ib,
 			if (b > 255)
 				b = 255;
 			
-			c_buf[idx][idy] = QColor(r, g, b);
+			c_buf[x][y] = QColor(r, g, b);
 		}
 		P += dP;
 		ip += d_ip;
@@ -168,16 +170,8 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v,
 		std::swap(d_ia, d_ib);
 	}
 	
-	for (int i = 0; i < dy_0_1; i++)
+	for (int y = 0; y < dy_0_1; y++)
 	{
-		if (A.x() > B.x())
-		{
-			std::swap(A, B);
-			std::swap(dA, dB);
-			std::swap(ia, ib);
-			std::swap(d_ia, d_ib);
-		}
-		
 		draw_line(A, B, ia, ib, colour);
 		
 		A += dA;
@@ -203,16 +197,8 @@ void ModelDrawer::draw_triangle(std::vector<Vertex> v,
 		d_ia = (intens[2] - intens[1]) / dy_1_2;
 	}
 	
-	for (int i = 0; i < dy_1_2; i++)
+	for (int y = 0; y < dy_1_2; y++)
 	{
-		if (A.x() > B.x())
-		{
-			std::swap(A, B);
-			std::swap(dA, dB);
-			std::swap(ia, ib);
-			std::swap(d_ia, d_ib);
-		}
-		
 		draw_line(A, B, ia, ib, colour);
 		
 		A += dA;
@@ -257,7 +243,7 @@ void ModelDrawer::draw_scene(std::vector<Model> models, Camera& cam)
 	light_pos.shift(canv_shift);
 	light_pos.rotate(canv_rotate, canv_center);
 	
-	std::vector<double>& params = cam.get_rotate_params();
+	// std::vector<double>& params = cam.get_rotate_params();
 	
 	Vertex v0(0, 0, 0);
 	
