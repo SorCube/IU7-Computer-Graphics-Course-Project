@@ -14,7 +14,7 @@ ModelDrawer::ModelDrawer(Canvas* canv) :
 {
 	LC = QColor("black");
 
-    light = Vertex(5000, 5000, 5000);
+    light = Vertex(0, 500, 500);
 
     z_buf = new int*[IMG_SIZE];
     c_buf = new QColor*[IMG_SIZE];

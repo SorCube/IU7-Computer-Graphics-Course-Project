@@ -54,9 +54,9 @@ Flag::Flag(Vertex topleft, double w, double h, QColor colour) :
 	ind = 0;
 	for (size_t i = 0; i < n - 1; i++, ind += m)
 		for (size_t j = ind; j < ind + m - 1; j++)
-		{
-			triangles.push_back(Triangle(j, j + m, j + 1, colour));
-			triangles.push_back(Triangle(j + 1, j + m, j + m + 1, colour));
+		{	
+			triangles.push_back(Triangle(j, j + 1, j + m, colour));
+			triangles.push_back(Triangle(j + m + 1, j + m, j + 1, colour));
 			
 			edges.push_back(Edge(nodes[j], nodes[j + 1], spring, fric));
 			edges.push_back(Edge(nodes[j], nodes[j + m], spring, fric));

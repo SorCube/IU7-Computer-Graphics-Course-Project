@@ -85,17 +85,17 @@ Model ParallelepipedCreator::create(Vertex pc, double a, double b,
 	vertices.push_back(Vertex(pc.x() + a, pc.y() - b, pc.z() - c));
 	vertices.push_back(Vertex(pc.x() + a, pc.y() - b, pc.z() + c));
 	
-	triangles.push_back(Triangle(1, 3, 0, colour));
-	triangles.push_back(Triangle(2, 0, 3, colour));
-	triangles.push_back(Triangle(3, 5, 2, colour));
-	triangles.push_back(Triangle(4, 2, 5, colour));
-	triangles.push_back(Triangle(5, 7, 4, colour));
-	triangles.push_back(Triangle(6, 4, 7, colour));
-	triangles.push_back(Triangle(7, 1, 6, colour));
-	triangles.push_back(Triangle(0, 6, 1, colour));
+	triangles.push_back(Triangle(0, 2, 1, colour));
+	triangles.push_back(Triangle(3, 1, 2, colour));
+	triangles.push_back(Triangle(2, 4, 3, colour));
+	triangles.push_back(Triangle(5, 3, 4, colour));
+	triangles.push_back(Triangle(4, 6, 5, colour));
+	triangles.push_back(Triangle(7, 5, 6, colour));
+	triangles.push_back(Triangle(6, 0, 7, colour));
+	triangles.push_back(Triangle(1, 7, 0, colour));
 	
 	triangles.push_back(Triangle(1, 7, 3, colour));
-	triangles.push_back(Triangle(5, 3, 7, colour));
+	triangles.push_back(Triangle(5, 7, 3, colour));
 	triangles.push_back(Triangle(2, 4, 0, colour));
 	triangles.push_back(Triangle(6, 0, 4, colour));
 	

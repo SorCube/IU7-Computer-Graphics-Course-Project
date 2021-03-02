@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "gui/canvas.h"
 #include "../workers/modelcreator.h"
 
 
@@ -39,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
 	ParallelepipedCreator cr_par;
 	facade.add_model(cr_par.create(Vertex(0, 0, 10),
 								   BASE_SIZE, BASE_SIZE, BASE_SIZE / 5,
-								   QColor(180, 180, 180)));
+								   QColor(255, 255, 255)));
 	
 	facade.add_camera(Vertex(0, 0, 0));
 
